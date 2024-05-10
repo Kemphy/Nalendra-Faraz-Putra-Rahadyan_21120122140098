@@ -1,0 +1,53 @@
+class LUGauss:
+    def __init__(self, A, b):
+        self.A = A
+        self.b = b
+
+    def hitung(self):
+        n = len(self.A)
+        L = [[0.0] * n for _ in range(n)]
+        U = [[0.0] * n for _ in range(n)]
+
+        for i in range(n):
+            L[i][i] = 1
+            for j in range(i, n):
+                L[j][i] = self.A[j][i] - sum(L[j][k] * U[k][i] for k in range(i))
+                
+            for j in range(i, n):
+                U[i][j] = (self.A[i][j] - sum(L[i][k] * U[k][j] for k in range(i))) / L[i][i]
+
+        y = self.forward_substitution(L, self.b)
+        x = self.backward_substitution(U, y)
+
+        return x
+
+    def forward_substitution(self, L, b):
+        n = len(L)
+        y = [0.0] * n
+        for i in range(n):
+            y[i] = b[i]
+            for j in range(i):
+                y[i] -= L[i][j] * y[j]
+            y[i] /= L[i][i]
+        return y
+
+    def backward_substitution(self, U, y):
+        n = len(U)
+        x = [0.0] * n
+        for i in range(n - 1, -1, -1):
+            x[i] = y[i]
+            for j in range(i + 1, n):
+                x[i] -= U[i][j] * x[j]
+            x[i] /= U[i][i]
+        return x
+
+# Contoh
+A = [[4, 3, 2],
+     [7, 4, 1],
+     [5, 2, 8]]
+
+b = [2, 7, 5]
+
+lu_solver = LUGauss(A, b)
+jawab = lu_solver.hitung()
+print("Jawab:", jawab)
