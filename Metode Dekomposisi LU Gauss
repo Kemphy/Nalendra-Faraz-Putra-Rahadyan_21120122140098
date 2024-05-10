@@ -16,12 +16,12 @@ class LUGauss:
             for j in range(i, n):
                 U[i][j] = (self.A[i][j] - sum(L[i][k] * U[k][j] for k in range(i))) / L[i][i]
 
-        y = self.forward_substitution(L, self.b)
-        x = self.backward_substitution(U, y)
+        y = self.substitusi_maju(L, self.b)
+        x = self.substitusi_mundur(U, y)
 
         return x
 
-    def forward_substitution(self, L, b):
+    def substitusi_maju(self, L, b):
         n = len(L)
         y = [0.0] * n
         for i in range(n):
@@ -31,7 +31,7 @@ class LUGauss:
             y[i] /= L[i][i]
         return y
 
-    def backward_substitution(self, U, y):
+    def substitusi_mundur(self, U, y):
         n = len(U)
         x = [0.0] * n
         for i in range(n - 1, -1, -1):
