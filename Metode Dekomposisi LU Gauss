@@ -81,11 +81,6 @@ def decomposition(A):
         L[i][q] = (A[i][q] - sum)/U[q][q] 
   return L, U 
  
-# Matrix A 
-A = [[8, -5, 2], 
-     [-1, 4, -6], 
-     [3, -1, 7]]
-
 # Hitung L and U      
 L, U = decomposition(A) 
 
