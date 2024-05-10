@@ -1,41 +1,75 @@
-class Crout:
-    def __init__(self, A, b):
-        self.A = A
-        self.b = b
-    
-    def hitung(self):
-        n = len(self.A)
-        L = [[0.0] * n for _ in range(n)]
-        U = [[0.0] * n for _ in range(n)]
+#Nalendra Faraz Putra Rahadyan (21120122140098)
+#Metode Numerik D
+#Metode Metode Dekomposisi Crout
 
-        for i in range(n):
-            L[i][i] = 1
+def print_matrix(matrix): 
+    for row in matrix: 
+        print(row) 
+         
+def crout_decomposition(A): 
+    n = len(A) 
+    L = [[0] * n for _ in range(n)] 
+    U = [[0] * n for _ in range(n)] 
+     
+    for j in range(n): 
+        U[j][j] = 1 
+         
+        for i in range(j, n): 
+            sum_val = sum(L[i][k] * U[k][j] for k in range(i)) 
+            L[i][j] = A[i][j] - sum_val 
+             
+        for i in range(j, n): 
+            sum_val = sum(L[j][k] * U[k][i] for k in range(j)) 
+            U[j][i] = (A[j][i] - sum_val) / L[j][j] 
+             
+    return L, U 
+ 
+def forward_substitution(L, b): 
+    n = len(b) 
+    y = [0] * n 
+     
+    for i in range(n): 
+        y[i] = (b[i] - sum(L[i][j] * y[j] for j in range(i))) / L[i][i] 
+         
+    return y 
+ 
+def backward_substitution(U, y): 
+    n = len(y) 
+    x = [0] * n 
+     
+    for i in range(n-1, -1, -1): 
+        x[i] = (y[i] - sum(U[i][j] * x[j] for j in range(i+1, n))) / U[i][i] 
+         
+    return x 
+ 
+def crout_solver(A, b): 
+    L, U = crout_decomposition(A) 
+    y = forward_substitution(L, b) 
+    x = backward_substitution(U, y) 
+    return x, L, U 
+ 
+# Contoh
+A = [[3, 5, 1], 
+     [7, 1, 6], 
+     [4, 1, 2]]
 
-            for j in range(i, n):
-                L[j][i] = self.A[j][i] - sum(L[j][k] * U[k][i] for k in range(i))
-            
-            for j in range(i, n):
-                U[i][j] = (self.A[i][j] - sum(L[i][k] * U[k][j] for k in range(i))) / L[i][i]
-
-        # Substitusi Maju for Ly = b
-        y = [0] * n
-        for i in range(n):
-            y[i] = (self.b[i] - sum(L[i][k] * y[k] for k in range(i))) / L[i][i]
-
-        # Substitusi Mundur for Ux = y
-        x = [0] * n
-        for i in range(n - 1, -1, -1):
-            x[i] = (y[i] - sum(U[i][k] * x[k] for k in range(i + 1, n))) / U[i][i]
-
-        return x
-
-# Cotoh:
-A = [[2, -1, 5], 
-     [-4, 7, -3], 
-     [9, -1, 2]]
-
-b = [6, 2, 1]
-
-crout_solver = Crout(A, b)
-jawab = crout_solver.hitung()
-print("Jawab:", jawab)
+b = [4, 10, 17] 
+ 
+ 
+solusi, L, U = crout_solver(A, b) 
+ 
+print("Matriks A:") 
+print_matrix(A) 
+print("Vektor B:") 
+print(b) 
+ 
+print("Matriks L:") 
+for row in L: 
+    print(row) 
+print("Matriks U:") 
+for row in U: 
+    print(row) 
+print("Vektor B:") 
+print(b) 
+print("Solusi:") 
+print(solusi) 
