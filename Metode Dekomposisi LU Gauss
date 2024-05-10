@@ -7,7 +7,7 @@ A = [[8, -5, 2],
      [-1, 4, -6], 
      [3, -1, 7]] 
 # Vector B 
-b= [2, 1, -2] 
+B = [2, 1, -2] 
  
 # create function to show element of matrix 
 def show(matrix): 
